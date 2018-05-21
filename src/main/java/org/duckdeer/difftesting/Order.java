@@ -5,17 +5,14 @@ import org.apache.commons.lang3.builder.DiffResult;
 import org.apache.commons.lang3.builder.Diffable;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Order implements Diffable<Order> {
 
     private String id;
     private String name;
     private Date orderDate;
-    private Collection<OrderPosition> orderPositions;
+    private Collection<OrderPosition> orderPositions = new HashSet<>();
     private Customer customer;
 
     public Order() {
@@ -62,6 +59,19 @@ public class Order implements Diffable<Order> {
         this.customer = customer;
     }
 
+    public void addOrderPosition(OrderPosition orderPosition) {
+        this.orderPositions.add(orderPosition);
+    }
+
+    public DiffResult diff(Order otherOrder) {
+        return new DiffBuilder(this, otherOrder, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("name", this.name, otherOrder.name)
+                .append("orderDate", this.orderDate, otherOrder.orderDate)
+                .append("orderPositions", this.orderPositions, otherOrder.orderPositions)
+                .append("customer", this.customer, otherOrder.customer)
+                .build();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,14 +91,5 @@ public class Order implements Diffable<Order> {
         return "Order{" +
                 "id=" + id +
                 '}';
-    }
-
-    public DiffResult diff(Order otherOrder) {
-        return new DiffBuilder(this, otherOrder, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("name", this.name, otherOrder.name)
-                .append("orderDate", this.orderDate, otherOrder.orderDate)
-                .append("orderPositions", this.orderPositions, otherOrder.orderPositions)
-                .append("customer", this.customer, otherOrder.customer)
-                .build();
     }
 }

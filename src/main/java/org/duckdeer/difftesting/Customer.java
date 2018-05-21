@@ -44,6 +44,7 @@ public class Customer implements Diffable<Customer> {
 
     @Override
     public boolean equals(Object o) {
+        System.out.println("Customer equals called");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
@@ -52,7 +53,6 @@ public class Customer implements Diffable<Customer> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
     }
 
